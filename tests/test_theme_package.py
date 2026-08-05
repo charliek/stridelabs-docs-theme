@@ -129,6 +129,54 @@ def test_all_font_sources_are_relative() -> None:
 
 
 # --------------------------------------------------------------------------
+# The mobile-drawer lockup trap
+# --------------------------------------------------------------------------
+
+
+def _rules_for(css: str, needle: str) -> list[str]:
+    """Return the selector text of every rule whose selector contains needle."""
+    return [
+        m.group(1).strip()
+        for m in re.finditer(r"([^{}]+)\{[^}]*\}", _strip_comments(css))
+        if needle in m.group(1)
+    ]
+
+
+def test_drawer_lockup_overrides_present() -> None:
+    """Zensical sizes the drawer's logo slot for a single glyph
+    (`.md-nav__title[for=__drawer] .md-logo { width: 1.6rem; height: 1.6rem }`).
+    The lockup is roughly 3.8rem wide with `flex: none` parts, so without an
+    override it overflows and paints on top of the site title — which renders
+    fine at desktop width and only breaks behind the hamburger menu."""
+    css = (PKG / "css" / "stridelabs.css").read_text()
+    selectors = _rules_for(css, '[for="__drawer"]')
+    assert selectors, "no drawer overrides at all — the lockup will overlap the title"
+
+    slot = [s for s in selectors if s.rstrip().endswith(".md-logo")]
+    assert slot, "the drawer's .md-logo slot is never resized"
+
+
+def test_drawer_svg_overrides_outspecify_zensical() -> None:
+    """Zensical also ships
+    `.md-nav .md-nav__title[for=__drawer] .md-logo svg { height: 100% }`.
+    Our svg overrides must be at least as specific or the owl and project icon
+    get stretched to the slot height. Both must lead with `.md-nav `, which is
+    what supplies the extra class needed to win."""
+    css = (PKG / "css" / "stridelabs.css").read_text()
+    svg_rules = [
+        s
+        for s in _rules_for(css, '[for="__drawer"]')
+        if "svg" in s and ".md-logo" in s
+    ]
+    assert svg_rules, "no drawer svg sizing overrides found"
+    for sel in svg_rules:
+        assert sel.lstrip().startswith(".md-nav "), (
+            f"drawer svg override {sel!r} is less specific than Zensical's own "
+            "rule and will silently lose"
+        )
+
+
+# --------------------------------------------------------------------------
 # End-to-end build
 # --------------------------------------------------------------------------
 

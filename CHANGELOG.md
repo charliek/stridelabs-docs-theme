@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.2.2
+
+### Fixed
+
+- **The header lockup overlapped the site title in the mobile drawer.** Zensical
+  sizes the drawer's logo slot for a single glyph
+  (`.md-nav__title[for=__drawer] .md-logo { width: 1.6rem; height: 1.6rem }`).
+  The lockup is roughly 3.8rem wide and its parts are `flex: none`, so they
+  overflowed that box and painted on top of the site name sitting beside it —
+  the divider and project icon landed mid-word. The slot now sizes to its
+  content.
+
+  This only ever showed **behind the hamburger menu on narrow viewports**. Every
+  desktop check passed, which is why it shipped in v0.1.0 and survived four
+  repos. Reported from a phone.
+
+  The `svg` overrides carry extra specificity on purpose: Zensical also ships
+  `.md-nav .md-nav__title[for=__drawer] .md-logo svg { height: 100% }`, which
+  would otherwise stretch both the owl and the project icon to the slot height.
+
+  Verified at 412px and 360px, light and dark, including a site name long
+  enough to wrap (`shed-remote-agent`) — it wraps cleanly instead of pushing
+  the lockup out of its slot.
+
+### Notes
+
+Two tests guard it, both confirmed to fail when the override is removed. They
+assert on selector *specificity*, not just presence, because a correct-looking
+rule that silently loses the cascade is the same bug wearing a hat.
+
 ## v0.2.1
 
 ### Fixed
