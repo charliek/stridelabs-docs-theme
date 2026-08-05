@@ -78,5 +78,19 @@ jobs:
           grep -q 'sl-lockup'   site-build/index.html
           grep -q 'sl-owl-eye'  site-build/index.html
           grep -q 'sl-proj'     site-build/index.html
-          grep -q 'family=Fraunces' site-build/index.html
+
+          # fonts are self-hosted (since v0.2.0): the stylesheet must be linked,
+          # the woff2 files must be copied into the site, and nothing may be
+          # fetched from Google. Asserting on the old `family=Fraunces` Google
+          # Fonts link is what let this job rot silently through two releases.
+          grep -q 'css/fonts.css' site-build/index.html
+          test -f site-build/css/fonts.css
+          test "$(ls site-build/fonts/*.woff2 | wc -l)" -gt 0
+          ! grep -qE 'fonts\.googleapis|fonts\.gstatic' site-build/index.html
+
+          # the mobile drawer overrides must survive into the shipped CSS --
+          # without them the lockup paints over the site title behind the
+          # hamburger menu, which no desktop check catches
+          grep -q '__drawer' site-build/css/stridelabs.css
+
           echo "theme applied correctly"

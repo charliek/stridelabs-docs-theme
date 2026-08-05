@@ -26,11 +26,20 @@ All notable changes to this project will be documented in this file.
   enough to wrap (`shed-remote-agent`) — it wraps cleanly instead of pushing
   the lockup out of its slot.
 
+- **CI's `consume` job had been failing since v0.2.0.** Its last assertion was
+  `grep -q 'family=Fraunces'` — the Google Fonts `<link>` that self-hosting
+  removed in v0.2.0. The job was never updated, so it went red on that release
+  and stayed red through v0.2.1. It now asserts what self-hosting actually
+  means: `css/fonts.css` linked and present, woff2 files copied into the site,
+  and **no** request to `fonts.googleapis.com` / `fonts.gstatic.com`. It also
+  asserts the drawer overrides survive into the shipped CSS.
+
 ### Notes
 
-Two tests guard it, both confirmed to fail when the override is removed. They
-assert on selector *specificity*, not just presence, because a correct-looking
-rule that silently loses the cascade is the same bug wearing a hat.
+Two tests guard the drawer fix, both confirmed to fail when the override is
+removed. They assert on selector *specificity*, not just presence, because a
+correct-looking rule that silently loses the cascade is the same bug wearing a
+hat.
 
 ## v0.2.1
 
