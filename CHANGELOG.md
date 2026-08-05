@@ -2,15 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.2.1
+
+### Fixed
+
+- **Narrowed an over-broad privacy claim.** v0.2.0's wording implied a site
+  built with this theme makes no third-party requests at all. It removes the
+  *font* requests; a site that sets `repo_url` still has Zensical's repo
+  integration calling `api.github.com` for star and fork counts. Caught in
+  review on charliek/prox#104. Documentation only — no behaviour change.
+
 ## v0.2.0
 
 ### Changed
 
 - **Fonts are now self-hosted.** `font: false` disables Zensical's built-in
   Google Fonts `<link>` and the package ships Fraunces, Inter and JetBrains
-  Mono as woff2. No requests reach `fonts.googleapis.com` or
-  `fonts.gstatic.com`, so no visitor IPs leave the docs site — the GDPR
-  concern behind Zensical's own `font: false` option — and pages render
+  Mono as woff2. No font requests reach `fonts.googleapis.com` or
+  `fonts.gstatic.com`, so the Google Fonts CDN never sees a visitor IP — the
+  GDPR concern behind Zensical's own `font: false` option — and pages render
   identically offline and behind a firewall.
 
   Variable fonts split by `unicode-range`, so a browser fetches only what a

@@ -5,8 +5,10 @@
    Zensical's built-in Google Fonts <link>. Everything is served from the
    docs site's own origin instead:
 
-     - no requests to fonts.googleapis.com / fonts.gstatic.com, so no visitor
-       IPs leave the site (the GDPR concern with the Google Fonts CDN)
+     - no font requests to fonts.googleapis.com / fonts.gstatic.com, so the
+       Google Fonts CDN never sees a visitor IP (the GDPR concern with it).
+       Note this covers fonts only -- a site that sets `repo_url` still has
+       Zensical's repo integration calling api.github.com for star counts.
      - one origin, so no extra DNS + TLS handshake on first paint
      - docs build and render identically offline and behind a firewall
      - all 24 sites render identically regardless of CDN availability

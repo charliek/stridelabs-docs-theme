@@ -21,7 +21,7 @@ docs = [
 ]
 
 [tool.uv.sources]
-stridelabs-docs-theme = { git = "https://github.com/charliek/stridelabs-docs-theme", tag = "v0.2.0" }
+stridelabs-docs-theme = { git = "https://github.com/charliek/stridelabs-docs-theme", tag = "v0.2.1" }
 ```
 
 ```toml
@@ -78,6 +78,10 @@ Why self-host:
 - **Privacy.** The Google Fonts CDN sees every visitor's IP. That is the
   GDPR concern behind Zensical's own `font: false` escape hatch, and it is
   worth avoiding by default across two dozen public sites.
+
+  Scope note: this removes the *font* requests. A site that sets `repo_url`
+  still has Zensical's repo integration calling `api.github.com` for star and
+  fork counts, which is a separate opt-out (drop `repo_url`).
 - **Performance.** One origin, so no extra DNS lookup and TLS handshake
   before the first paint.
 - **Reliability.** Docs build and render identically offline, behind a
