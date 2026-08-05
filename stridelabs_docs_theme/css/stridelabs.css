@@ -1,0 +1,173 @@
+/* ==========================================================================
+   StrideLabs docs theme — OPTION C: "Family lockup, clean ground" (recommended)
+   B's owl + per-project icon lockup and editorial detailing, on A's
+   near-white reading ground. Parchment is kept for code panels and accents
+   only, so long-form reference text sits on the highest-contrast surface.
+   ========================================================================== */
+
+:root {
+  --sl-cover:    #2f3d2e;
+  --sl-cover-d:  #243024;
+  --sl-forest:   #3c5237;
+  --sl-rust:     #9c4a20;
+  --sl-gold:     #9a7220;
+  --sl-gold-eye: #f4c430;
+  --sl-ink:      #2b2618;
+  --sl-ink-soft: #5e5640;
+  --sl-parch:    #f5efdf;
+  --sl-parch-3:  #faf6ea;
+  --sl-rule:     #cdc0a3;
+  --sl-rule-soft:#ddd2b8;
+}
+
+:root {
+  --md-text-font: "Inter";
+  --md-code-font: "JetBrains Mono";
+}
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-header__topic > .md-ellipsis {
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 560;
+  letter-spacing: -0.014em;
+}
+.md-typeset h1 em, .md-typeset h2 em { font-style: italic; font-weight: 460; }
+
+/* --- LIGHT: parchment ground, as on the site ---------------------------- */
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color:        var(--sl-cover);
+  --md-primary-fg-color--light: var(--sl-forest);
+  --md-primary-fg-color--dark:  var(--sl-cover-d);
+  --md-primary-bg-color:        #f5efdf;
+  --md-primary-bg-color--light: rgba(245, 239, 223, 0.75);
+
+  --md-accent-fg-color:         var(--sl-rust);
+  --md-accent-fg-color--transparent: rgba(156, 74, 32, 0.1);
+
+  /* near-white reading ground: parchment is reserved for code panels and
+     accents, never for body text */
+  --md-default-bg-color:        #fdfcf8;
+  --md-default-fg-color:        var(--sl-ink);
+  --md-default-fg-color--light: var(--sl-ink-soft);
+  --md-default-fg-color--lighter: #8a8168;
+  --md-default-fg-color--lightest: var(--sl-rule-soft);
+
+  --md-typeset-color:           var(--sl-ink);
+  --md-typeset-a-color:         var(--sl-forest);
+
+  /* warm parchment code panels read as a deliberate surface against the
+     near-white page, and keep syntax tokens crisp */
+  --md-code-bg-color:           #f5efdf;
+  --md-code-fg-color:           #35301f;
+
+  --md-footer-bg-color:         var(--sl-cover-d);
+  --md-footer-bg-color--dark:   #1c261c;
+
+  color-scheme: light;
+}
+
+/* --- DARK: layered ON TOP of stock "slate" so its 14 --md-code-hl-*
+       syntax-highlight vars still apply. Renaming the scheme loses them. --- */
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color:        #1b241b;
+  --md-primary-fg-color--light: var(--sl-forest);
+  --md-primary-fg-color--dark:  #141b14;
+  --md-primary-bg-color:        #ede6d4;
+  --md-primary-bg-color--light: rgba(237, 230, 212, 0.7);
+
+  --md-accent-fg-color:         var(--sl-gold-eye);
+  --md-accent-fg-color--transparent: rgba(244, 196, 48, 0.12);
+
+  --md-default-bg-color:        #161c16;
+  --md-default-fg-color:        #e8e2d2;
+  --md-default-fg-color--light: #b9b19b;
+  --md-default-fg-color--lighter: #8c8571;
+  --md-default-fg-color--lightest: #3a4239;
+
+  --md-typeset-color:           #e8e2d2;
+  --md-typeset-a-color:         #a8c39d;
+
+  --md-code-bg-color:           #1e261e;
+  --md-code-fg-color:           #ddd6c4;
+
+  --md-footer-bg-color:         #111611;
+  --md-footer-bg-color--dark:   #0d110d;
+
+  color-scheme: dark;
+}
+
+/* ==========================================================================
+   Header lockup: owl (family mark) + rule + project icon
+   ========================================================================== */
+.sl-lockup { display: flex; align-items: center; gap: 0.55rem; }
+.sl-lockup .sl-owl { width: 1.5rem; height: auto; flex: none; }
+.sl-lockup .sl-owl .sl-owl-body { fill: currentColor; }
+.sl-lockup .sl-owl .sl-owl-eye  { fill: var(--sl-gold-eye); }
+.sl-lockup .sl-owl .sl-owl-glint{ fill: #ffffff; }
+.sl-lockup .sl-div {
+  width: 1px; height: 1.15rem; flex: none;
+  background: currentColor; opacity: 0.35;
+}
+.sl-lockup .sl-proj { width: 1.1rem; height: 1.1rem; flex: none; }
+.sl-lockup .sl-proj svg { width: 100%; height: 100%; fill: currentColor; }
+
+/* the header title gets the mono eyebrow treatment from the site's topline */
+.md-header__topic:first-child > .md-ellipsis {
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 560;
+  letter-spacing: -0.01em;
+}
+
+/* ==========================================================================
+   Editorial detailing
+   ========================================================================== */
+
+/* heavy front-page rule under the page title */
+.md-typeset h1 {
+  padding-bottom: 0.32em;
+  border-bottom: 3px solid var(--md-default-fg-color);
+  margin-bottom: 0.9em;
+}
+/* lighter rules on section heads */
+.md-typeset h2 {
+  padding-bottom: 0.22em;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+
+/* mono eyebrow labels in the sidebar, like the site's section kickers */
+.md-nav--primary > .md-nav__list > .md-nav__item--section > .md-nav__link {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--md-default-fg-color--light);
+}
+.md-nav__title {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+/* table headers as mono kickers */
+.md-typeset table:not([class]) th {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.7em;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  background: var(--md-code-bg-color);
+}
+
+/* gold focus ring, constant across schemes */
+a:focus-visible, button:focus-visible, .md-nav__link:focus-visible {
+  outline: 2.5px solid var(--sl-gold-eye);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.md-typeset a { text-underline-offset: 0.18em; }
+.md-typeset a:hover { color: var(--md-accent-fg-color); }
+
+/* admonitions pick up the rust accent */
+.md-typeset .admonition { border-left-width: 3px; }

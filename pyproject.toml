@@ -1,0 +1,37 @@
+[project]
+name = "stridelabs-docs-theme"
+version = "0.1.0"
+description = "Shared StrideLabs documentation theme for Zensical sites"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Charlie Knudsen" }]
+keywords = ["zensical", "mkdocs", "documentation", "theme"]
+dependencies = ["zensical>=0.0.52"]
+
+[project.urls]
+Homepage = "https://github.com/charliek/stridelabs-docs-theme"
+Issues = "https://github.com/charliek/stridelabs-docs-theme/issues"
+
+# The entry point is how Zensical (and MkDocs) resolve `theme.name`. The key
+# on the left is what consumers write in their config; the value is the
+# package directory holding the theme files.
+[project.entry-points."mkdocs.themes"]
+stridelabs = "stridelabs_docs_theme"
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# hatchling ships every file under the package directory, not just *.py, so
+# the templates and CSS are included without a force-include table. There is
+# a build-time check for this in tests/ — a wheel missing them would still
+# install cleanly and silently fall back to stock Zensical.
+[tool.hatch.build.targets.wheel]
+packages = ["stridelabs_docs_theme"]

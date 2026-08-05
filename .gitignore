@@ -1,0 +1,11 @@
+# Python / uv
+.venv/
+__pycache__/
+*.pyc
+dist/
+*.egg-info/
+
+# Zensical
+site-build/
+site/
+/.cache/

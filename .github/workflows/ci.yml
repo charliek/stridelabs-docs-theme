@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v9.0.0
+      - run: uv python install 3.13
+      - run: uv sync --group dev
+      - run: uv run pytest -q
+
+  # Installing from a git ref is how every consumer actually consumes this, so
+  # it is what CI exercises — a wheel that builds locally can still ship
+  # without its templates and fall back to stock Zensical silently.
+  consume:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v9.0.0
+      - run: uv python install 3.13
+      - name: Build a throwaway site against the packaged theme
+        run: |
+          set -euo pipefail
+          THEME="$PWD"
+          work="$(mktemp -d)"
+          cd "$work"
+          mkdir docs
+          printf '# Consumer\n\nBody text.\n' > docs/index.md
+          cat > pyproject.toml <<EOF
+          [project]
+          name = "consumer"
+          version = "0.1.0"
+          requires-python = ">=3.12"
+
+          [dependency-groups]
+          docs = ["zensical>=0.0.52", "stridelabs-docs-theme"]
+
+          [tool.uv.sources]
+          stridelabs-docs-theme = { path = "$THEME" }
+          EOF
+          cat > zensical.toml <<'EOF'
+          [project]
+          site_name = "Consumer"
+          docs_dir = "docs"
+          site_dir = "site-build"
+
+          [project.theme]
+          name = "stridelabs"
+
+          [project.theme.icon]
+          logo = "material/console"
+          EOF
+          uv sync --group docs
+          uv run zensical build --clean --strict
+
+          # assert the theme actually applied rather than silently no-op'ing
+          grep -q 'css/stridelabs.css' site-build/index.html
+          test -f site-build/css/stridelabs.css
+          grep -q 'sl-lockup'   site-build/index.html
+          grep -q 'sl-owl-eye'  site-build/index.html
+          grep -q 'sl-proj'     site-build/index.html
+          grep -q 'family=Fraunces' site-build/index.html
+          echo "theme applied correctly"
