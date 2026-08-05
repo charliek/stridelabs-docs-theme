@@ -7,9 +7,13 @@
 extends: material
 
 # --- type stack, from stridelabs.ai --------------------------------------
-font:
-  text: Inter
-  code: JetBrains Mono
+# `false` disables Zensical's built-in Google Fonts <link>. The theme ships
+# the fonts itself (see css/fonts.css), so nothing is fetched from a third
+# party and no visitor IPs leave the docs site.
+#
+# Zensical's built-in loader can only fetch two families anyway — a display
+# face on top of body + code would always have needed a second request.
+font: false
 
 # --- colour schemes -------------------------------------------------------
 # IMPORTANT: these use the stock scheme names "default" and "slate", not

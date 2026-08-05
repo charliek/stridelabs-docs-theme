@@ -1,6 +1,6 @@
 [project]
 name = "stridelabs-docs-theme"
-version = "0.1.0"
+version = "0.2.0"
 description = "Shared StrideLabs documentation theme for Zensical sites"
 readme = "README.md"
 requires-python = ">=3.10"

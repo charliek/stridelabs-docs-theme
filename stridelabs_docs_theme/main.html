@@ -1,11 +1,16 @@
 {#-
-  Links the theme's stylesheet. Overriding `main.html` (rather than
+  Links the theme's stylesheets. Overriding `main.html` (rather than
   `base.html`) is the documented-robust extension point: block overrides
   survive upstream template changes.
 
+  Fonts are self-hosted — `font: false` in mkdocs_theme.yml disables
+  Zensical's Google Fonts <link>, and css/fonts.css declares @font-face
+  against the woff2 files this package ships. Nothing is fetched from a third
+  party.
+
   A consuming repo that sets its own `custom_dir` with a `main.html` will
-  replace this file and lose the stylesheet link. If you need per-repo
-  template overrides, extend this template instead of redefining it:
+  replace this file and lose both stylesheets. If you need per-repo template
+  overrides, extend this template instead of redefining it:
 
       {% extends "main.html" %}
       {% block extrahead %}
@@ -16,16 +21,6 @@
 {% extends "base.html" %}
 
 {% block extrahead %}
-  {#-
-    Fraunces has to be loaded explicitly. Zensical's `font.text` / `font.code`
-    settings fetch exactly two families (Inter and JetBrains Mono here), so
-    the display face used for headings in the stylesheet would otherwise
-    silently fall back to Georgia — the CSS asks for a font nothing ever
-    downloads, and the build still reports success.
-  -#}
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,560;1,9..144,400;1,9..144,500&display=swap">
-
+  <link rel="stylesheet" href="{{ 'css/fonts.css' | url }}">
   <link rel="stylesheet" href="{{ 'css/stridelabs.css' | url }}">
 {% endblock %}

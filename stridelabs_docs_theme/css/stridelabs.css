@@ -20,10 +20,6 @@
   --sl-rule-soft:#ddd2b8;
 }
 
-:root {
-  --md-text-font: "Inter";
-  --md-code-font: "JetBrains Mono";
-}
 .md-typeset h1,
 .md-typeset h2,
 .md-typeset h3,

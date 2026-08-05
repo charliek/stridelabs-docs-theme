@@ -21,7 +21,7 @@ docs = [
 ]
 
 [tool.uv.sources]
-stridelabs-docs-theme = { git = "https://github.com/charliek/stridelabs-docs-theme", tag = "v0.1.0" }
+stridelabs-docs-theme = { git = "https://github.com/charliek/stridelabs-docs-theme", tag = "v0.2.0" }
 ```
 
 ```toml
@@ -54,7 +54,7 @@ Everything below is a **default**. Anything in a consuming repo's
 | | |
 |---|---|
 | **Header** | owl (family mark) + hairline rule + your project icon |
-| **Type** | Fraunces display, Inter body, JetBrains Mono code |
+| **Type** | Fraunces display, Inter body, JetBrains Mono code — **self-hosted**, no third-party requests |
 | **Light** | near-white `#fdfcf8` reading ground, parchment code panels |
 | **Dark** | `#161c16` ground derived from the brand's deep forest |
 | **Detailing** | 3px rule under `h1`, hairline under `h2`, mono uppercase kickers in the sidebar and table headers |
@@ -66,6 +66,41 @@ Everything below is a **default**. Anything in a consuming repo's
 `[project.theme.icon] logo` accepts any icon from the sets Zensical ships:
 `material`, `lucide`, `fontawesome`, `octicons`, `simple`. The owl stays
 constant; this icon is what distinguishes one site from the next.
+
+## Fonts
+
+The theme sets `font: false`, which disables Zensical's built-in Google Fonts
+`<link>`, and ships the three families itself as woff2. Nothing is fetched
+from `fonts.googleapis.com` or `fonts.gstatic.com`.
+
+Why self-host:
+
+- **Privacy.** The Google Fonts CDN sees every visitor's IP. That is the
+  GDPR concern behind Zensical's own `font: false` escape hatch, and it is
+  worth avoiding by default across two dozen public sites.
+- **Performance.** One origin, so no extra DNS lookup and TLS handshake
+  before the first paint.
+- **Reliability.** Docs build and render identically offline, behind a
+  firewall, and if the CDN is having a bad day.
+- **It was always going to need two requests.** Zensical's font loader
+  fetches exactly two families, so a display face on top of body + code
+  already meant a second `<link>` to Google. Self-hosting removes both.
+
+These are **variable** fonts (one file spans the whole weight range), split
+by `unicode-range`, so a browser downloads only what a page uses. Verified on
+a real page: 3 files, latin subsets only — the latin-ext and italic variants
+are not fetched unless the glyphs appear.
+
+All three families are SIL Open Font License 1.1, which permits
+redistribution; the licence texts ship in `stridelabs_docs_theme/fonts/OFL.txt`.
+
+### Changing the fonts
+
+Edit `css/fonts.css` and the `@font-face` blocks together — the stylesheet
+sets `--md-text-font` / `--md-code-font` as variables (not `font-family`) so
+the theme's system fallbacks still apply. A test asserts that every face the
+CSS asks for is actually declared and bundled, because a missing font is a
+silent failure: the page renders in a fallback and the build still passes.
 
 ## Design notes
 

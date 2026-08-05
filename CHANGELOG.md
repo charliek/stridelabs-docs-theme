@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.2.0
+
+### Changed
+
+- **Fonts are now self-hosted.** `font: false` disables Zensical's built-in
+  Google Fonts `<link>` and the package ships Fraunces, Inter and JetBrains
+  Mono as woff2. No requests reach `fonts.googleapis.com` or
+  `fonts.gstatic.com`, so no visitor IPs leave the docs site — the GDPR
+  concern behind Zensical's own `font: false` option — and pages render
+  identically offline and behind a firewall.
+
+  Variable fonts split by `unicode-range`, so a browser fetches only what a
+  page uses. Verified on a real page: 18 requests, none to a third-party
+  host, 3 woff2 files (latin subsets only; latin-ext and italic are not
+  fetched unless those glyphs appear).
+
+  This also removes a redundancy that existed in v0.1.0: Zensical's loader
+  fetches exactly two families, so the Fraunces display face required a
+  *second* `<link>` to Google on every page. Both are now gone.
+
+  All three families are SIL OFL 1.1; licence texts ship in
+  `stridelabs_docs_theme/fonts/OFL.txt`.
+
+### Notes
+
+Two new tests guard this, since a missing font is a silent failure — the page
+renders in a fallback face and the build still reports success:
+`test_no_third_party_font_requests` and `test_all_font_sources_are_relative`.
+
 ## v0.1.0
 
 Initial release. The StrideLabs documentation theme, packaged so it can be
